@@ -1,6 +1,7 @@
 package com.rest.project;
+import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,17 +11,21 @@ import com.rest.model.RequestUser;
 import com.rest.model.ResponseDTO;
 import com.rest.model.User;
 import com.rest.service.UserService;
-
+import com.rest.project.ApplicationConstants;
 
 @RestController
+@RequestMapping("/")
+@Api(value="onlinestore", description="Welcome controller")
 public class WelcomeController {
+	@Autowired
+	public EmailServiceImpl emailService;
 	
 	@RequestMapping(value="/allUsers", method=RequestMethod.GET)
 	public ResponseDTO getAllUsers() {
 		ResponseDTO response = new ResponseDTO();
 		UserService userService = new UserService();
 		response.setReturn_object(userService.getAllUsers());
-		response.setStatus(true);
+		response.setStatus(ApplicationConstants.TRUE);
 		response.setMessage("");
 		return response;
 	}
@@ -30,7 +35,7 @@ public class WelcomeController {
 		ResponseDTO response = new ResponseDTO();
 		UserService userService = new UserService();
 		response.setReturn_object(userService.getUserById(id));
-		response.setStatus(true);
+		response.setStatus(ApplicationConstants.TRUE);
 		response.setMessage("");
 		return response;
 	}
@@ -47,12 +52,12 @@ public class WelcomeController {
 		UserService userService = new UserService();
 		try{
 			userService.insertUser(addUser);
-			response.setStatus(true);
+			response.setStatus(ApplicationConstants.TRUE);
 			response.setMessage("");
 		}
 		catch(Exception e){
 			response.setMessage(e.getMessage());
-			response.setStatus(false);
+			response.setStatus(ApplicationConstants.FALSE);
 		}
 		return response;
 	}
@@ -67,12 +72,12 @@ public class WelcomeController {
 		UserService userService = new UserService();
 		try{
 			userService.updateUser(user);
-			response.setStatus(true);
+			response.setStatus(ApplicationConstants.TRUE);
 			response.setMessage("");
 		}
 		catch(Exception e){
 			response.setMessage(e.getMessage());
-			response.setStatus(false);
+			response.setStatus(ApplicationConstants.FALSE);
 		}
 		return response;
 	}
@@ -87,18 +92,19 @@ public class WelcomeController {
 		try{
 			UserService userService = new UserService();
 			userService.deleteUser(id);
-			response.setStatus(true);
+			response.setStatus(ApplicationConstants.TRUE);
 			response.setMessage("");
 		}
 		catch(Exception e){
 			response.setMessage(e.getMessage());
-			response.setStatus(false);
+			response.setStatus(ApplicationConstants.FALSE);
 		}
 		return response;
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String index(){
+		emailService.sendSimpleMessage("jitenderbadoni@gmail.com", "Test", "Test"); 
 		return "Welcome to Spring Application";
 	}
 }
