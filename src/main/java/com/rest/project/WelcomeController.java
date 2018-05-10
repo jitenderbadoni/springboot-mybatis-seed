@@ -104,7 +104,7 @@ public class WelcomeController {
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String index(){
-		emailService.sendSimpleMessage("jitenderbadoni@gmail.com", "Test", "Test"); 
+		emailService.sendSimpleMessage(ApplicationConstants.SEND_TO, ApplicationConstants.SUBJECT, ApplicationConstants.TEXT); 
 		return "Welcome to Spring Application";
 	}
 }
